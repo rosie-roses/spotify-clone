@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",
+    "lodash": "^4.17.21",
     "next": "14.2.15",
     "next-auth": "^4.24.8",
     "node-fetch": "^3.3.2",
