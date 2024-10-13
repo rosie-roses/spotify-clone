@@ -1,5 +1,5 @@
 import NextAuth from "next-auth";
-import SpotifyProvider from "next-auth/providers/spotify"
+import SpotifyProvider from "next-auth/providers/spotify";
 import fetch from "node-fetch";
 
 const scopes = [

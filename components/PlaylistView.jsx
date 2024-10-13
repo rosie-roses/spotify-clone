@@ -2,6 +2,7 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react'
 import { shuffle } from 'lodash';
+import Song from '@/components/Song';
 
 const colours = [
     'from-indigo-500',
@@ -58,7 +59,10 @@ const PlaylistView = ({globalPlaylistId}) => {
   return (
     <div className='flex-grow h-screen'>
         <header style={{opacity: opacity}} className='text-white sticky top-0 h-20 z-10 text-4xl bg-neutral-800 p-8 flex items-center font-bold'>
-            <div style={{opacity: textOpacity}}>{playlistData?.name}</div>
+            <div style={{opacity: textOpacity}} className='flex items-center'>
+                {playlistData && <img className='h-8 w-8 mr-6' src={playlistData.images[0].url} />}
+                <p>{playlistData?.name}</p>
+            </div>
         </header>
         <div className='absolute z-20 top-5 right-8 flex items-center bg-black bg-opacity-70 text-white space-x-3 opacity-90 hover:opacity-80 cursor-pointer rounded-full  p-1 pr-2'>
             <img className='rounded-full w-7 h-7' src={session?.user.image} alt='profile pic' />
@@ -75,7 +79,7 @@ const PlaylistView = ({globalPlaylistId}) => {
             </section>
             <div className='text-white px-8 flex flex-col space-y-1 pb-28'>
                 {playlistData?.tracks.items.map((track, i) => {
-                    return <div key={track.track.id}>{track.track.name}</div>
+                    return <Song key={track.track.id} serialNum={i} track={track.track} />
                 })}
             </div>
         </div>
