@@ -14,7 +14,7 @@ const colours = [
     'from-purple-500'
 ]
 
-const PlaylistView = ({globalPlaylistId}) => {
+const PlaylistView = ({ globalPlaylistId, setGlobalCurrentSongId, setGlobalIsTrackPlaying }) => {
     const { data: session } = useSession();
     const [ playlistData, setPlaylistData ] = useState(null);
     const [ colour, setColour ] = useState(colours[0]);
@@ -39,7 +39,6 @@ const PlaylistView = ({globalPlaylistId}) => {
     useEffect(() => {
         async function getPlaylistData() {
             if (session && session.accessToken) {
-                console.log(session);
                 const res = await fetch(`https://api.spotify.com/v1/playlists/${globalPlaylistId}`, {
                     headers: {
                         authorization: `Bearer ${session.accessToken}` 
@@ -79,7 +78,13 @@ const PlaylistView = ({globalPlaylistId}) => {
             </section>
             <div className='text-white px-8 flex flex-col space-y-1 pb-28'>
                 {playlistData?.tracks.items.map((track, i) => {
-                    return <Song key={track.track.id} serialNum={i} track={track.track} />
+                    return <Song 
+                        key={track.track.id} 
+                        serialNum={i} 
+                        track={track.track} 
+                        setGlobalCurrentSongId={setGlobalCurrentSongId} 
+                        setGlobalIsTrackPlaying={setGlobalIsTrackPlaying} 
+                    />
                 })}
             </div>
         </div>
