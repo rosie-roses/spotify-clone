@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import FeaturedPlaylists from './FeaturedPlaylists';
 import SearchResults from './SearchResults';
 
-const Search = ({ setView, setGlobalPlaylistId }) => {
+const Search = ({ setView, setGlobalPlaylistId, setGlobalCurrentSongId, setGlobalIsTrackPlaying }) => {
   const { data: session } = useSession();
   const [ searchData, setSearchData ] = useState(null);
   const [ inputValue, setInputValue ] = useState(null);
@@ -43,7 +43,9 @@ const Search = ({ setView, setGlobalPlaylistId }) => {
           <ChevronDownIcon className='h-5 w-5' />
       </div>
       <div>
-        { searchData === null ? <FeaturedPlaylists setView={setView} setGlobalPlaylistId={setGlobalPlaylistId} /> : <SearchResults /> }
+        { searchData === null ? <FeaturedPlaylists setView={setView} setGlobalPlaylistId={setGlobalPlaylistId} /> : 
+        <SearchResults topPlaylist={searchData?.playlists?.items[0]} playlists={searchData?.playlists?.items} tracks={searchData?.tracks?.items} artists={searchData?.artists?.items} 
+        setView={setView} setGlobalPlaylistId={setGlobalPlaylistId} setGlobalCurrentSongId={setGlobalCurrentSongId} setGlobalIsTrackPlaying={setGlobalIsTrackPlaying} /> }
       </div>
     </div>
   )

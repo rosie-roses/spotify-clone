@@ -36,7 +36,7 @@ const Song = ({ serialNum, track, setGlobalCurrentSongId, setGlobalIsTrackPlayin
     <div onClick={async () => await playSong(track)} onMouseEnter={() => setPlayHover(true)} onMouseLeave={() => setPlayHover(false)} className='grid grid-cols-2 text-neutral-400 text-sm py-4 px-5 hover:bg-white hover:bg-opacity-10 rounded-lg cursor-default'>
         <div className='flex items-center space-x-4'>
             {playHover ? <PlayIcon className='h-5 w-5 text-white' /> : <p className='w-5'>{serialNum + 1}</p>}
-            <img className='h-10 w-10' src={track.album.images[0].url} />
+            {track?.album?.images[0]?.url && <img className='h-10 w-10' src={track.album.images[0].url} />}
             <div>
                 <div className='w-36 lg:w-64'><div className='truncate text-white text-base'>{track.name}</div></div>
                 <div className='w-36'><div className='truncate'>

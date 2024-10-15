@@ -32,6 +32,8 @@ export default function Home() {
           <Search 
             setView={setView}
             setGlobalPlaylistId={setGlobalPlaylistId}
+            setGlobalCurrentSongId={setGlobalCurrentSongId} 
+            setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
           /> }
         { view === 'library' && 
           <Library 
