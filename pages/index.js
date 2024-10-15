@@ -29,7 +29,12 @@ export default function Home() {
           /> 
         }
         { view === 'search' && <Search /> }
-        { view === 'library' && <Library /> }
+        { view === 'library' && 
+          <Library 
+            setView={setView}
+            setGlobalPlaylistId={setGlobalPlaylistId} 
+          />
+        }
         { view === 'artist' && <Artist /> }
       </main>
       <div className="sticky z-20 bottom-0 w-full">
