@@ -28,7 +28,11 @@ export default function Home() {
             setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
           /> 
         }
-        { view === 'search' && <Search /> }
+        { view === 'search' && 
+          <Search 
+            setView={setView}
+            setGlobalPlaylistId={setGlobalPlaylistId}
+          /> }
         { view === 'library' && 
           <Library 
             setView={setView}
