@@ -1,38 +1,28 @@
+import spotifyAPI, { LOGIN_URL } from "@/lib/spotify";
 import NextAuth from "next-auth";
 import SpotifyProvider from "next-auth/providers/spotify";
 import fetch from "node-fetch";
 
-const scopes = [
-    "user-read-email",
-    "playlist-read-private",
-    "playlist-read-collaborative",
-    "user-read-currently-playing",
-    "user-modify-playback-state"
-].join(',');
-
-const params = {
-    scope: scopes
-};
-
-const LOGIN_URL = 'https://accounts.spotify.com/authorize?' + new URLSearchParams(params).toString();
-
 async function refreshAccessToken(token) {
-    const params = new URLSearchParams();
-    params.append('grant_type', 'refresh_token');
-    params.append('refresh_token', token.refreshToken);
-    const response = await fetch('https://accounts.spotify.com/api/token', {
-        method: 'POST',
-        headers: {
-            'Authorization': 'Basic ' + (new Buffer.from(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64'))
-        },
-        body: params
-    });
-    const data = await response.json();
-    return {
+    try {
+      spotifyAPI.setAccessToken(token.accessToken);
+      spotifyAPI.setRefreshToken(token.refreshToken);
+
+      const { body: refreshedToken } = await spotifyAPI.refreshAccessToken();
+      console.log('Refreshed token is: ', refreshedToken);
+
+      return {
         ...token,
-        accessToken: data.access_token,
-        refreshToken: data.refresh_token ?? token.refreshToken,
-        accessTokenExpires: Date.now() + data.expires_in * 1000
+        accessToken: refreshedToken.access_token,
+        accessTokenExpires: Date.now() + refreshedToken.expires_in * 1000,
+        refreshToken: refreshedToken.refresh_token ?? token.refreshToken,
+      };
+    } catch (err) {
+      console.error(err);
+      return {
+        ...token,
+        error: 'RefreshAccessTokenError'
+      };
     }
 }
 
@@ -51,28 +41,33 @@ export const authOptions = {
     signIn: '/login'
   },
   callbacks: {
-    async jwt({ token, account }) {
-      // Persist the OAuth access_token to the token right after signin
-      if (account) {
-        token.accessToken = account.access_token;
-        token.refreshToken = account.refresh_token;
-        token.accessTokenExpires = account.expires_at;
-        return token;
+    async jwt({ token, account, user }) {
+      // Initial sign in
+      if (account && user) {
+        return {
+          ...token,
+          accessToken: account.access_token,
+          refreshToken: account.refresh_token,
+          username: account.providerAccountId,
+          accessTokenExpires: account.expires_at * 1000,
+        }
       }
       // Access token has not expired
       if (token.accessTokenExpires && Date.now() < token.accessTokenExpires * 1000) {
         return token;
       }
       // Access token has expired
-      return refreshAccessToken(token);
+      return await refreshAccessToken(token);
     },
-    async session({ session, token, user }) {
+    async session({ session, token }) {
       // Send properties to the client, like an access_token from a provider.
-      session.accessToken = token.accessToken;
+      session.user.accessToken = token.accessToken;
+      session.user.refreshToken = token.refreshToken;
+      session.user.username = token.username;
+
       return session;
     }
   }
-
 };
 
 export default NextAuth(authOptions);

@@ -14,8 +14,8 @@ export default function Home() {
   const [globalIsTrackPlaying, setGlobalIsTrackPlaying] = useState(false);
 
   return (
-    <>
-      <main className='h-screen overflow-hidden bg-black'>
+    <div className="h-screen bg-black overflow-hidden">
+      <main>
         <div className="flex w-full">
           <Sidebar
             view={view}
@@ -64,6 +64,6 @@ export default function Home() {
           />
         </div>
       </main>
-    </>
+    </div>
   );
 }
