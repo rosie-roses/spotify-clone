@@ -15,53 +15,55 @@ export default function Home() {
 
   return (
     <>
-      <main className='flex w-full h-screen overflow-hidden bg-black'>
-        <Sidebar
-          view={view}
-          setView={setView}
-          setGlobalPlaylistId={setGlobalPlaylistId}
-        />
-        { view === 'playlist' && 
-          <PlaylistView 
-            globalPlaylistId={globalPlaylistId} 
-            setGlobalCurrentSongId={setGlobalCurrentSongId} 
-            setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
-            setView={setView}
-            setGlobalArtistId={setGlobalArtistId}
-          /> 
-        }
-        { view === 'search' && 
-          <Search 
+      <main className='h-screen overflow-hidden bg-black'>
+        <div className="flex w-full">
+          <Sidebar
+            view={view}
             setView={setView}
             setGlobalPlaylistId={setGlobalPlaylistId}
-            setGlobalCurrentSongId={setGlobalCurrentSongId} 
-            setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
-            setGlobalArtistId={setGlobalArtistId}
-          /> }
-        { view === 'library' && 
-          <Library 
-            setView={setView}
-            setGlobalPlaylistId={setGlobalPlaylistId} 
           />
-        }
-        { view === 'artist' &&
-          <Artist 
-            globalArtistId={globalArtistid} 
-            setGlobalArtistId={setGlobalArtistId}
+          { view === 'playlist' && 
+            <PlaylistView 
+              globalPlaylistId={globalPlaylistId} 
+              setGlobalCurrentSongId={setGlobalCurrentSongId} 
+              setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
+              setView={setView}
+              setGlobalArtistId={setGlobalArtistId}
+            /> 
+          }
+          { view === 'search' && 
+            <Search 
+              setView={setView}
+              setGlobalPlaylistId={setGlobalPlaylistId}
+              setGlobalCurrentSongId={setGlobalCurrentSongId} 
+              setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
+              setGlobalArtistId={setGlobalArtistId}
+            /> }
+          { view === 'library' && 
+            <Library 
+              setView={setView}
+              setGlobalPlaylistId={setGlobalPlaylistId} 
+            />
+          }
+          { view === 'artist' &&
+            <Artist 
+              globalArtistId={globalArtistid} 
+              setGlobalArtistId={setGlobalArtistId}
+              setGlobalCurrentSongId={setGlobalCurrentSongId} 
+              setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
+              setView={setView}
+            /> 
+          }
+        </div>
+        <div className="sticky z-20 bottom-0 w-full">
+          <Player 
+            globalCurrentSongId={globalCurrentSongId} 
             setGlobalCurrentSongId={setGlobalCurrentSongId} 
+            globalIsTrackPlaying={globalIsTrackPlaying}
             setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
-            setView={setView}
-          /> 
-        }
+          />
+        </div>
       </main>
-      <div className="sticky z-20 bottom-0 w-full">
-        <Player 
-          globalCurrentSongId={globalCurrentSongId} 
-          setGlobalCurrentSongId={setGlobalCurrentSongId} 
-          globalIsTrackPlaying={globalIsTrackPlaying}
-          setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
-        />
-      </div>
     </>
   );
 }
