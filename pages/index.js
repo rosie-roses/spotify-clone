@@ -26,6 +26,8 @@ export default function Home() {
             globalPlaylistId={globalPlaylistId} 
             setGlobalCurrentSongId={setGlobalCurrentSongId} 
             setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
+            setView={setView}
+            setGlobalArtistId={setGlobalArtistId}
           /> 
         }
         { view === 'search' && 
@@ -34,6 +36,7 @@ export default function Home() {
             setGlobalPlaylistId={setGlobalPlaylistId}
             setGlobalCurrentSongId={setGlobalCurrentSongId} 
             setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
+            setGlobalArtistId={setGlobalArtistId}
           /> }
         { view === 'library' && 
           <Library 
@@ -41,7 +44,15 @@ export default function Home() {
             setGlobalPlaylistId={setGlobalPlaylistId} 
           />
         }
-        { view === 'artist' && <Artist /> }
+        { view === 'artist' &&
+          <Artist 
+            globalArtistId={globalArtistid} 
+            setGlobalArtistId={setGlobalArtistId}
+            setGlobalCurrentSongId={setGlobalCurrentSongId} 
+            setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
+            setView={setView}
+          /> 
+        }
       </main>
       <div className="sticky z-20 bottom-0 w-full">
         <Player 

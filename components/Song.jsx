@@ -2,7 +2,7 @@ import { PlayIcon } from '@heroicons/react/24/solid';
 import { useSession } from 'next-auth/react';
 import React, { useState } from 'react';
 
-const Song = ({ serialNum, track, setGlobalCurrentSongId, setGlobalIsTrackPlaying }) => {
+const Song = ({ serialNum, track, setGlobalCurrentSongId, setGlobalIsTrackPlaying, setView, setGlobalArtistId }) => {
     const { data: session } = useSession();
     const [ playHover, setPlayHover ] = useState(false);
 
@@ -32,10 +32,15 @@ const Song = ({ serialNum, track, setGlobalCurrentSongId, setGlobalIsTrackPlayin
         );
     }
 
+    function selectArtist(artist) {
+        setView("artist");
+        setGlobalArtistId(artist.id);
+    }
+
   return (
-    <div onClick={async () => await playSong(track)} onMouseEnter={() => setPlayHover(true)} onMouseLeave={() => setPlayHover(false)} className='grid grid-cols-2 text-neutral-400 text-sm py-4 px-5 hover:bg-white hover:bg-opacity-10 rounded-lg cursor-default'>
+    <div onMouseEnter={() => setPlayHover(true)} onMouseLeave={() => setPlayHover(false)} className='grid grid-cols-2 text-neutral-400 text-sm py-4 px-5 hover:bg-white hover:bg-opacity-10 rounded-lg cursor-default'>
         <div className='flex items-center space-x-4'>
-            {playHover ? <PlayIcon className='h-5 w-5 text-white' /> : <p className='w-5'>{serialNum + 1}</p>}
+            {playHover ? <PlayIcon onClick={async () => await playSong(track)} className='h-5 w-5 text-white' /> : <p className='w-5'>{serialNum + 1}</p>}
             {track?.album?.images[0]?.url && <img className='h-10 w-10' src={track.album.images[0].url} />}
             <div>
                 <div className='w-36 lg:w-64'><div className='truncate text-white text-base'>{track.name}</div></div>
@@ -44,7 +49,7 @@ const Song = ({ serialNum, track, setGlobalCurrentSongId, setGlobalIsTrackPlayin
                         track.artists.map((artist, i) => {
                             return (
                                 <>
-                                    <span className='hover:underline'>{artist.name}</span>
+                                    <span onClick={() => selectArtist(artist)} className='hover:underline'>{artist.name}</span>
                                     <span>{ i != track.artists.length - 1 ? ', ' : null }</span>
                                 </>
                             )

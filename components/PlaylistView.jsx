@@ -12,9 +12,9 @@ const colours = [
     'from-yellow-500',
     'from-pink-500',
     'from-purple-500'
-]
+];
 
-const PlaylistView = ({ globalPlaylistId, setGlobalCurrentSongId, setGlobalIsTrackPlaying }) => {
+const PlaylistView = ({ globalPlaylistId, setGlobalCurrentSongId, setGlobalIsTrackPlaying, setView, setGlobalArtistId }) => {
     const { data: session } = useSession();
     const [ playlistData, setPlaylistData ] = useState(null);
     const [ colour, setColour ] = useState(colours[0]);
@@ -53,7 +53,7 @@ const PlaylistView = ({ globalPlaylistId, setGlobalCurrentSongId, setGlobalIsTra
 
     useEffect(() => {
         setColour(shuffle(colours).pop());
-    }, [globalPlaylistId])
+    }, [globalPlaylistId]);
 
   return (
     <div className='flex-grow h-screen'>
@@ -84,6 +84,8 @@ const PlaylistView = ({ globalPlaylistId, setGlobalCurrentSongId, setGlobalIsTra
                         track={track.track} 
                         setGlobalCurrentSongId={setGlobalCurrentSongId} 
                         setGlobalIsTrackPlaying={setGlobalIsTrackPlaying} 
+                        setView={setView}
+                        setGlobalArtistId={setGlobalArtistId}
                     />
                 })}
             </div>

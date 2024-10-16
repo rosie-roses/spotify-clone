@@ -2,7 +2,7 @@ import { PlayIcon } from '@heroicons/react/24/solid';
 import { useSession } from 'next-auth/react';
 import React from 'react'
 
-const SearchResults = ({ topPlaylist, playlists, tracks, artists, setView, setGlobalPlaylistId, setGlobalCurrentSongId, setGlobalIsTrackPlaying }) => {
+const SearchResults = ({ topPlaylist, playlists, tracks, artists, setView, setGlobalPlaylistId, setGlobalCurrentSongId, setGlobalIsTrackPlaying, setGlobalArtistId }) => {
     const { data: session } = useSession();
 
     function millisToMinutesAndSeconds(millis) {
@@ -34,6 +34,11 @@ const SearchResults = ({ topPlaylist, playlists, tracks, artists, setView, setGl
     function selectPlaylist(playlist) {
         setView("playlist");
         setGlobalPlaylistId(playlist.id);
+    }
+
+    function selectArtist(artist) {
+        setView("artist");
+        setGlobalArtistId(artist.id);
     }
 
   return (
@@ -79,7 +84,7 @@ const SearchResults = ({ topPlaylist, playlists, tracks, artists, setView, setGl
             <div className='flex flex-wrap gap-4'>
                 {
                     artists.slice(0, 4).map((artist) => {
-                        return <div key={artist.id} className='cursor-pointer relative group w-56 mb-2 bg-neutral-800 hover:bg-neutral-600 rounded-md p-4'>
+                        return <div onClick={() => selectArtist(artist)} key={artist.id} className='cursor-pointer relative group w-56 mb-2 bg-neutral-800 hover:bg-neutral-600 rounded-md p-4'>
                                 <div className='absolute opacity-0 group-hover:opacity-100 transition-all ease-in-out duration-200 shadow-2xl 
                 shadow-neutral-900 z-10 h-12 w-12 flex items-center justify-center rounded-full bg-green-500 top-[156px] group-hover:top-[152px] right-6'>
                                     <PlayIcon className='h-6 w-6 text-black'></PlayIcon>
