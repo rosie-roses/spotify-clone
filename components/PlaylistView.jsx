@@ -3,6 +3,7 @@ import { signOut, useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react'
 import { shuffle } from 'lodash';
 import Song from '@/components/Song';
+import useSpotify from '@/hooks/useSpotify';
 
 const colours = [
     'from-indigo-500',
@@ -16,6 +17,7 @@ const colours = [
 
 const PlaylistView = ({ globalPlaylistId, setGlobalCurrentSongId, setGlobalIsTrackPlaying, setView, setGlobalArtistId }) => {
     const { data: session } = useSession();
+    const spotifyAPI = useSpotify();
     const [ playlistData, setPlaylistData ] = useState(null);
     const [ colour, setColour ] = useState(colours[0]);
     const [ opacity, setOpacity ] = useState(0);
@@ -37,19 +39,14 @@ const PlaylistView = ({ globalPlaylistId, setGlobalCurrentSongId, setGlobalIsTra
     }
 
     useEffect(() => {
-        async function getPlaylistData() {
-            if (session && session.accessToken) {
-                const res = await fetch(`https://api.spotify.com/v1/playlists/${globalPlaylistId}`, {
-                    headers: {
-                        authorization: `Bearer ${session.accessToken}` 
-                    }
-                });
-                const data = await res.json();
-                setPlaylistData(data);
-            }
+        if (spotifyAPI.getAccessToken()) {
+            spotifyAPI.getPlaylist(globalPlaylistId).then((data) => {
+                setPlaylistData(data.body);
+            }).catch((err) => {
+                console.log(`Error getting playlist ${globalPlaylistId}: `, err);
+            });
         }
-        getPlaylistData();
-    }, [session, globalPlaylistId]);
+    }, [session, spotifyAPI, globalPlaylistId]);
 
     useEffect(() => {
         setColour(shuffle(colours).pop());
@@ -57,9 +54,9 @@ const PlaylistView = ({ globalPlaylistId, setGlobalCurrentSongId, setGlobalIsTra
 
   return (
     <div className='flex-grow h-screen'>
-        <header style={{opacity: opacity}} className='text-white sticky top-0 h-20 z-10 text-4xl bg-neutral-800 p-8 flex items-center font-bold'>
+        <header style={{opacity: opacity}} className='text-white sticky top-0 h-20 z-10 text-4xl bg-neutral-900 p-8 flex items-center font-bold'>
             <div style={{opacity: textOpacity}} className='flex items-center'>
-                {playlistData && <img className='h-8 w-8 mr-6' src={playlistData.images[0].url} />}
+                {<img className='h-8 w-8 mr-6' src={playlistData?.images?.[0]?.url} />}
                 <p>{playlistData?.name}</p>
             </div>
         </header>
@@ -68,9 +65,9 @@ const PlaylistView = ({ globalPlaylistId, setGlobalCurrentSongId, setGlobalIsTra
             <p className='text-sm'>Logout</p>
             <ChevronDownIcon className='h-5 w-5' />
         </div>
-        <div onScroll={(e) => changeOpacity(e.target.scrollTop)} className='relative -top-20 h-screen overflow-y-scroll bg-neutral-900'>
-            <section className={`flex items-end space-x-7 bg-gradient-to-b to-neutral-900 ${colour} h-80 text-white p-8`}>
-                {playlistData && <img className='h-44 w-44' src={playlistData.images[0].url} />}
+        <div onScroll={(e) => changeOpacity(e.target.scrollTop)} className='relative -top-20 h-screen overflow-y-scroll bg-black'>
+            <section className={`flex items-end space-x-7 bg-gradient-to-b to-black ${colour} h-80 text-white p-8`}>
+                {<img className='h-44 w-44' src={playlistData?.images?.[0]?.url} />}
                 <div>
                     <p className='text-sm font-bold'>Playlist</p>
                     <h1 className='text-2xl md:text-3xl lg:text-5xl font-extrabold'>{playlistData?.name}</h1>

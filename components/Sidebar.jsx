@@ -21,7 +21,8 @@ const Sidebar = ({view, setView, setGlobalPlaylistId}) => {
     }, [session, spotifyAPI]);
 
   return (
-    <div className='w-64 grow-0 shrink-0 h-screen overflow-y-scroll border-r border-neutral-900 text-neutral-400 flex flex-col p-5 space-y-4 text-sm hidden md:inline-flex'>
+    <div className='text-neutral-400 p-5 text-xs lg:text-sm border-r border-neutral-900 overflow-y-scroll scrollbar-hide h-screen
+    sm:max-w-[12rem] lg:max-w-[15rem] hidden md:inline-flex space-y-4 flex-col pb-40'>
         <div className='mt-1 mb-5'><SpotifySVG /></div>
         <button className='flex items-center space-x-2 hover:text-white'>
             <HomeIcon className='h-5 w-5'/>

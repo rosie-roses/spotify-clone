@@ -1,3 +1,4 @@
+import useSpotify from '@/hooks/useSpotify';
 import { PlayIcon } from '@heroicons/react/24/solid';
 import { useSession } from 'next-auth/react';
 import React, { useState } from 'react';
@@ -5,21 +6,14 @@ import React, { useState } from 'react';
 const Song = ({ serialNum, track, setGlobalCurrentSongId, setGlobalIsTrackPlaying, setView, setGlobalArtistId }) => {
     const { data: session } = useSession();
     const [ playHover, setPlayHover ] = useState(false);
+    const spotifyAPI = useSpotify();
 
     async function playSong(track) {
-        if (session && session.accessToken) {
-            setGlobalCurrentSongId(track.id);
-            setGlobalIsTrackPlaying(true);
-            const res = await fetch(`https://api.spotify.com/v1/me/player/play`, {
-                method: 'PUT',
-                headers: {
-                    authorization: `Bearer ${session.accessToken}`
-                },
-                body: JSON.stringify({
-                    uris: [track.uri]
-                })
-            });
-        }
+        setGlobalCurrentSongId(track.id);
+        setGlobalIsTrackPlaying(true);
+        spotifyAPI.play({
+            uris: [track.uri]
+        });
     }
 
     function millisToMinutesAndSeconds(millis) {
