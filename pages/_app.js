@@ -6,7 +6,14 @@ const theme = extendTheme({
   config: {
     initialColorMode: 'dark',
     useSystemColorMode: false,
-  }
+  },
+  styles: {
+    global: {
+      body: {
+        bg: 'black', 
+      },
+    },
+  },
 });
 
 export default function App({ Component, pageProps:{ session, ...pageProps} }) {
