@@ -17,7 +17,8 @@ const colours = [
     'purple'
 ];
 
-const PlaylistView = ({ setView, globalPlaylistId, setGlobalCurrentSongId, setGlobalIsTrackPlaying, setPlayURI, deviceId, globalIsTrackPlaying, playURI }) => {
+const PlaylistView = ({ setView, globalPlaylistId, setGlobalCurrentSongId, setGlobalIsTrackPlaying, setPlayURI, deviceId, 
+    globalIsTrackPlaying, playURI, setGlobalArtistId }) => {
     const { playlist, loading, error } = usePlaylist(globalPlaylistId); 
     const [ headerGradient, setHeaderGradient ] = useState(colours[0]);
     const spotifyApi = useSpotify();
@@ -38,21 +39,21 @@ const PlaylistView = ({ setView, globalPlaylistId, setGlobalCurrentSongId, setGl
     const handlePlayClick = async () => {
         if (deviceId) {
             if (globalIsTrackPlaying && playURI === playlist.uri) {
-                // Pause if the playlist is already playing
+                // Pause if the playlist context is already playing
                 await spotifyApi.pause().then(() => {
                     setGlobalIsTrackPlaying(false);
                 }).catch((err) => {
                     console.error('Error when pausing playback: ', err);
                 });
             } else if (!globalIsTrackPlaying && playURI === playlist.uri) {
-                // Resume if the same playlist is paused
+                // Resume if the same playlist context is paused
                 await spotifyApi.play({ device_id: deviceId }).then(() => {
                     setGlobalIsTrackPlaying(true);
                 }).catch((err) => {
                     console.error('Error when resuming playback: ', err);
                 });
             } else {
-                // Play new playlist if it's different or stopped
+                // Play new playlist context if it's different or stopped
                 await spotifyApi.play({ device_id: deviceId, context_uri: playlist.uri }).then(() => { 
                     setGlobalIsTrackPlaying(true);
                     setPlayURI(playlist.uri);
@@ -70,7 +71,7 @@ const PlaylistView = ({ setView, globalPlaylistId, setGlobalCurrentSongId, setGl
             {!loading && !error && playlist && (
                 <div>
                     <div className='h-screen overflow-y-scroll bg-black'>
-                    <section style={{ background: headerGradient }} className={`flex flex-col md:flex-row items-center text-left md:items-end h-70 text-white p-8`}>
+                        <section style={{ background: headerGradient }} className={`flex flex-col md:flex-row items-center text-left md:items-end h-70 text-white p-8`}>
                             <div className='flex-shrink-0 mb-6 md:mb-0'>
                                 <img className='h-44 w-44' src={playlist.images?.[0]?.url} alt={playlist.name} />
                             </div>
@@ -84,12 +85,12 @@ const PlaylistView = ({ setView, globalPlaylistId, setGlobalCurrentSongId, setGl
                                     </div>
                                     <Button  
                                         onClick={handlePlayClick} 
-                                        bg={'green.400'}
+                                        bg={'green.500'}
                                         rounded={'full'}
                                         width={70}
                                         height={70}
                                         className="flex-shrink-0" 
-                                        _hover={{ bg: 'green.400' }}
+                                        _hover={{ bg: 'green.500' }}
                                     >
                                         {globalIsTrackPlaying && playURI === playlist.uri ? ( 
                                             <IconPlayerPauseFilled color='black' />
@@ -110,6 +111,8 @@ const PlaylistView = ({ setView, globalPlaylistId, setGlobalCurrentSongId, setGl
                                     deviceId={deviceId}
                                     globalIsTrackPlaying={globalIsTrackPlaying}
                                     playURI={playURI}
+                                    setView={setView}
+                                    setGlobalArtistId={setGlobalArtistId}
                                 />
                             })}
                         </div>

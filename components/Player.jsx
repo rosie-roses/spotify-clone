@@ -207,11 +207,11 @@ const PlayerUI = ({ globalIsTrackPlaying, setGlobalIsTrackPlaying, setDeviceId, 
                         max={duration}
                         value={progress}
                         onChange={handleSeek}
-                        colorScheme="green.400"
+                        colorScheme="green.500"
                         width="80%"
                     >
                         <SliderTrack bg="gray.700">
-                            <SliderFilledTrack bg="green.400" />
+                            <SliderFilledTrack bg="green.500" />
                         </SliderTrack>
                         <SliderThumb boxSize={3} />
                     </Slider>
@@ -226,11 +226,11 @@ const PlayerUI = ({ globalIsTrackPlaying, setGlobalIsTrackPlaying, setDeviceId, 
                     max={100} 
                     value={volume} 
                     onChange={handleVolumeChange}
-                    colorScheme="green.400"
+                    colorScheme="green.500"
                     width={40}
                 >
                     <SliderTrack bg="gray.700">
-                        <SliderFilledTrack bg="green.400" />
+                        <SliderFilledTrack bg="green.500" />
                     </SliderTrack>
                     <SliderThumb boxSize={3} />
                 </Slider>

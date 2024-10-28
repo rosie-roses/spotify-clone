@@ -4,6 +4,7 @@ import Home from "@/components/Home";
 import { useState } from "react";
 import PlaylistView from "@/components/PlaylistView";
 import Player from "@/components/Player";
+import Artist from "@/components/Artist";
 
 export default function App() {
   const [view, setView] = useState('home');
@@ -12,6 +13,7 @@ export default function App() {
   const [globalIsTrackPlaying, setGlobalIsTrackPlaying] = useState(false);
   const [playURI, setPlayURI] = useState(null);
   const [deviceId, setDeviceId] = useState(null);
+  const [globalArtistid, setGlobalArtistId] = useState(null);
 
   return (
     <div className={`min-h-screen text-sm text-center sm:text-left overflow-hidden`}>
@@ -37,7 +39,21 @@ export default function App() {
           deviceId={deviceId}
           globalIsTrackPlaying={globalIsTrackPlaying}
           playURI={playURI}
+          setGlobalArtistId={setGlobalArtistId}
         />}
+        { view === 'artist' &&
+        <Artist 
+          globalArtistid={globalArtistid}
+          globalIsTrackPlaying={globalIsTrackPlaying}
+          setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
+          playURI={playURI}
+          setPlayURI={setPlayURI}
+          deviceId={deviceId}
+          setGlobalCurrentSongId={setGlobalCurrentSongId} 
+          setView={setView}
+          setGlobalArtistId={setGlobalArtistId}
+        />
+        }
         </div>
         <div className="fixed bottom-0 left-0 w-full z-20">
           <Player 

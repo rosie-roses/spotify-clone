@@ -17,7 +17,7 @@ const Home = ({ setView, setGlobalPlaylistId }) => {
 
     return (
         <div className='w-screen h-screen overflow-y-scroll p-8 pb-20'>
-            <h1 className="text-2xl text-neutral-300 font-bold mb-8">Playlists by Category</h1>
+            <h1 className="text-2xl text-neutral-300 font-bold mb-8 text-left">Playlists by Category</h1>
 
             {loading && (<p className="text-neutral-400 mt-3">Loading playlists...</p>)}
             {error && (<p className="text-red-400">Error fetching playlists: {error.message}</p>)}

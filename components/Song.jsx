@@ -3,7 +3,8 @@ import { IconPlayerPlayFilled, IconPlayerPauseFilled } from '@tabler/icons-react
 import React, { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 
-const Song = ({ serialNum, track, setGlobalCurrentSongId, setGlobalIsTrackPlaying, setPlayURI, deviceId, globalIsTrackPlaying, playURI }) => {
+const Song = ({ serialNum, track, setGlobalCurrentSongId, setGlobalIsTrackPlaying, setPlayURI, deviceId, globalIsTrackPlaying, 
+    playURI, setView, setGlobalArtistId }) => {
     const [ playHover, setPlayHover ] = useState(false);
     const isSmallScreen = useMediaQuery({ query: '(max-width: 768px)' });
     const spotifyApi = useSpotify();
@@ -45,51 +46,56 @@ const Song = ({ serialNum, track, setGlobalCurrentSongId, setGlobalIsTrackPlayin
         );
     }
 
-  return (
-    <div onMouseEnter={() => setPlayHover(true)} onMouseLeave={() => setPlayHover(false)} 
-        onClick={async () => {
-            if (isSmallScreen) {
-                await togglePlayPause();
-            }
-        }}
-        className='grid grid-cols-2 text-neutral-400 text-sm py-4 px-5 hover:bg-neutral-800 rounded-lg cursor-default'>
-        <div className='flex items-center space-x-4'>
-            { !isSmallScreen ? (
-                <div className='flex justify-center items-center mr-4' onClick={() => togglePlayPause()}>
-                    {playHover ? (
-                        globalIsTrackPlaying && playURI === track.uri ? ( 
-                            <IconPlayerPauseFilled color='white' cursor={'pointer'} />
-                        ) : ( <IconPlayerPlayFilled color='white' cursor={'pointer'} />)
-                    ) : (
-                    !isSmallScreen && <p className='w-6'>{serialNum + 1}</p>
-                    )} 
-                </div>) : (
-                    null
-                )
-            }
-            {track?.album?.images[0]?.url && <img className='h-10 w-10' src={track.album?.images?.[0]?.url} />}
-            <div className='text-left'>
-                <div className='text-white w-36 lg:w-64 truncate'>{track.name}</div>
-                <div className='w-36 truncate'>
-                    {
-                        track.artists?.map((artist, i) => {
-                            return (
-                                <span key={artist.id}>
-                                    <span className='cursor-pointer hover:underline'>{artist.name}</span>
-                                    <span>{ i != track.artists.length - 1 ? ', ' : null }</span>
-                                </span>
-                            )
-                        })
-                    }
+    function selectArtist(artist) {
+        setView("artist");
+        setGlobalArtistId(artist.id);
+    }
+
+    return (
+        <div onMouseEnter={() => setPlayHover(true)} onMouseLeave={() => setPlayHover(false)} 
+            onClick={async () => {
+                if (isSmallScreen) {
+                    await togglePlayPause();
+                }
+            }}
+            className='grid grid-cols-2 text-neutral-400 text-sm py-4 px-5 hover:bg-neutral-800 rounded-lg cursor-default'>
+            <div className='flex items-center space-x-4'>
+                { !isSmallScreen ? (
+                    <div className='flex justify-center items-center mr-4' onClick={() => togglePlayPause()}>
+                        {playHover ? (
+                            globalIsTrackPlaying && playURI === track.uri ? ( 
+                                <IconPlayerPauseFilled color='white' cursor={'pointer'} />
+                            ) : ( <IconPlayerPlayFilled color='white' cursor={'pointer'} />)
+                        ) : (
+                        !isSmallScreen && <p className='w-6'>{serialNum + 1}</p>
+                        )} 
+                    </div>) : (
+                        null
+                    )
+                }
+                {track?.album?.images[0]?.url && <img className='h-10 w-10' src={track.album?.images?.[0]?.url} />}
+                <div className='text-left'>
+                    <div className='text-white w-36 lg:w-64 truncate'>{track.name}</div>
+                    <div className='w-36 truncate'>
+                        {
+                            track.artists?.map((artist, i) => {
+                                return (
+                                    <span key={artist.id}>
+                                        <span onClick={() => selectArtist(artist)} className='cursor-pointer hover:underline'>{artist.name}</span>
+                                        <span>{ i != track.artists.length - 1 ? ', ' : null }</span>
+                                    </span>
+                                )
+                            })
+                        }
+                    </div>
                 </div>
             </div>
+            <div className='flex items-center justify-between ml-auto md:ml-0'>
+            <div className='w-40 hidden md:inline truncate cursor-pointer hover:underline'>{track.album?.name}</div>
+                <div>{millisToMinutesAndSeconds(track.duration_ms)}</div>
+            </div>
         </div>
-        <div className='flex items-center justify-between ml-auto md:ml-0'>
-        <div className='w-40 hidden md:inline truncate cursor-pointer hover:underline'>{track.album?.name}</div>
-            <div>{millisToMinutesAndSeconds(track.duration_ms)}</div>
-        </div>
-    </div>
-  )
+    )
 }
 
 export default Song;
