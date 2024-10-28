@@ -13,7 +13,7 @@ const Sidebar = ({ view, setView, setGlobalPlaylistId }) => {
 
     return (
         <div className='text-neutral-300 grow-0 shrink-0 p-5 text-xs lg:text-sm border-r border-neutral-800 overflow-y-scroll scrollbar-hide h-screen
-        sm:max-w-[12rem] lg:min-w-[14rem] lg:max-w-[15rem] hidden md:inline-flex space-y-2 flex-col'>
+        sm:max-w-[12rem] lg:min-w-[14rem] lg:max-w-[15rem] hidden md:inline-flex space-y-2 flex-col pb-40'>
             <div className='mt-2 mb-3'><SpotifySVG /></div>
             <button onClick={() => signOut()} className='flex items-center space-x-3 cursor-pointer hover:bg-neutral-800 hover:text-white transition-colors duration-200 rounded p-2'>
                 <IconLogout className='h-5 w-5'/>

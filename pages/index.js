@@ -44,6 +44,7 @@ export default function App() {
             globalIsTrackPlaying={globalIsTrackPlaying}
             setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
             setDeviceId={setDeviceId}
+            deviceId={deviceId}
           />
         </div>
       </main>
