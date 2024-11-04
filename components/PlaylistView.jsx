@@ -18,7 +18,7 @@ const colours = [
 ];
 
 const PlaylistView = ({ setView, globalPlaylistId, setGlobalCurrentSongId, setGlobalIsTrackPlaying, setPlayURI, deviceId, 
-    globalIsTrackPlaying, playURI, setGlobalArtistId }) => {
+    globalIsTrackPlaying, playURI, setGlobalArtistId, setGlobalAlbumId }) => {
     const { playlist, loading, error } = usePlaylist(globalPlaylistId); 
     const [ headerGradient, setHeaderGradient ] = useState(colours[0]);
     const spotifyApi = useSpotify();
@@ -113,6 +113,7 @@ const PlaylistView = ({ setView, globalPlaylistId, setGlobalCurrentSongId, setGl
                                     playURI={playURI}
                                     setView={setView}
                                     setGlobalArtistId={setGlobalArtistId}
+                                    setGlobalAlbumId={setGlobalAlbumId}
                                 />
                             })}
                         </div>

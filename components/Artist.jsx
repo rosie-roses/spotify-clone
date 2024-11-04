@@ -21,7 +21,7 @@ const colours = [
 ];
 
 const Artist = ({ globalArtistid, globalIsTrackPlaying, setGlobalIsTrackPlaying, playURI, setPlayURI, deviceId, 
-    setGlobalCurrentSongId, setView, setGlobalArtistId }) => {
+    setGlobalCurrentSongId, setView, setGlobalArtistId, setGlobalAlbumId }) => {
     const { artist, loading, error } = useArtist(globalArtistid);
     const { topTracks, loadingTopTracks, errorTopTracks } = useArtistTopTracks(globalArtistid);
     const { discography, loadingDiscography, errorDiscography } = useArtistDiscography(globalArtistid);
@@ -48,16 +48,16 @@ const Artist = ({ globalArtistid, globalIsTrackPlaying, setGlobalIsTrackPlaying,
         }
     }, [dominantColor]);
 
-    const handlePlayClick = async (artist) => {
+    const handlePlayClick = async (obj) => {
         if (deviceId) {
-            if (globalIsTrackPlaying && playURI === artist.uri) {
+            if (globalIsTrackPlaying && playURI === obj.uri) {
                 await spotifyApi.pause().then(() => setGlobalIsTrackPlaying(false)).catch(err => console.error('Error when pausing playback:', err));
-            } else if (!globalIsTrackPlaying && playURI === artist.uri) {
+            } else if (!globalIsTrackPlaying && playURI === obj.uri) {
                 await spotifyApi.play({ device_id: deviceId }).then(() => setGlobalIsTrackPlaying(true)).catch(err => console.error('Error when resuming playback:', err));
             } else {
-                await spotifyApi.play({ device_id: deviceId, context_uri: artist.uri }).then(() => {
+                await spotifyApi.play({ device_id: deviceId, context_uri: obj.uri }).then(() => {
                     setGlobalIsTrackPlaying(true);
-                    setPlayURI(artist.uri);
+                    setPlayURI(obj.uri);
                 }).catch(err => console.error('Error when playing context URI:', err));
             }
         }
@@ -78,6 +78,11 @@ const Artist = ({ globalArtistid, globalIsTrackPlaying, setGlobalIsTrackPlaying,
     function selectArtist(artist) {
         setView("artist");
         setGlobalArtistId(artist.id);
+    }
+
+    function selectAlbum(album) {
+        setView("album");
+        setGlobalAlbumId(album.id);
     }
 
     return (
@@ -169,8 +174,8 @@ const Artist = ({ globalArtistid, globalIsTrackPlaying, setGlobalIsTrackPlaying,
                             </div>
                             <div className="flex overflow-x-scroll no-scrollbar space-x-4 px-8 pb-6">
                                 {discography.slice(0, visibleAlbums).map((album) => (
-                                    <div key={album.id} className='cursor-pointer relative group w-48 mb-2 bg-neutral-900 hover:bg-neutral-800 rounded-md p-4'>
-                                        <div className='absolute opacity-0 group-hover:opacity-100 transition-all ease-in-out duration-200 shadow-2xl 
+                                    <div onClick={() => {selectAlbum(album)}} key={album.id} className='cursor-pointer relative group w-48 mb-2 bg-neutral-900 hover:bg-neutral-800 rounded-md p-4'>
+                                        <div onClick={() => {handlePlayClick(album)}} className='absolute opacity-0 group-hover:opacity-100 transition-all ease-in-out duration-200 shadow-2xl 
                                         shadow-neutral-900 z-10 h-12 w-12 flex items-center justify-center rounded-full bg-green-400 top-[124px] group-hover:top-[120px] right-6'>
                                             <IconPlayerPlayFilled className='h-6 w-6 text-black' />
                                         </div>

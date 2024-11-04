@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 
 const Song = ({ serialNum, track, setGlobalCurrentSongId, setGlobalIsTrackPlaying, setPlayURI, deviceId, globalIsTrackPlaying, 
-    playURI, setView, setGlobalArtistId }) => {
+    playURI, setView, setGlobalArtistId, setGlobalAlbumId }) => {
     const [ playHover, setPlayHover ] = useState(false);
     const isSmallScreen = useMediaQuery({ query: '(max-width: 768px)' });
     const spotifyApi = useSpotify();
@@ -51,6 +51,11 @@ const Song = ({ serialNum, track, setGlobalCurrentSongId, setGlobalIsTrackPlayin
         setGlobalArtistId(artist.id);
     }
 
+    function selectAlbum(album) {
+        setView("album");
+        setGlobalAlbumId(album.id);
+    }
+
     return (
         <div onMouseEnter={() => setPlayHover(true)} onMouseLeave={() => setPlayHover(false)} 
             onClick={async () => {
@@ -91,7 +96,7 @@ const Song = ({ serialNum, track, setGlobalCurrentSongId, setGlobalIsTrackPlayin
                 </div>
             </div>
             <div className='flex items-center justify-between ml-auto md:ml-0'>
-            <div className='w-40 hidden md:inline truncate cursor-pointer hover:underline'>{track.album?.name}</div>
+            <div className='w-40 hidden md:inline truncate cursor-pointer hover:underline'><span onClick={() => selectAlbum(track.album)}>{track.album?.name}</span></div>
                 <div>{millisToMinutesAndSeconds(track.duration_ms)}</div>
             </div>
         </div>

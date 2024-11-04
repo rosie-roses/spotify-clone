@@ -5,6 +5,7 @@ import { useState } from "react";
 import PlaylistView from "@/components/PlaylistView";
 import Player from "@/components/Player";
 import Artist from "@/components/Artist";
+import Album from "@/components/Album";
 
 export default function App() {
   const [view, setView] = useState('home');
@@ -14,6 +15,7 @@ export default function App() {
   const [playURI, setPlayURI] = useState(null);
   const [deviceId, setDeviceId] = useState(null);
   const [globalArtistid, setGlobalArtistId] = useState(null);
+  const [globalAlbumId, setGlobalAlbumId] = useState(null);
 
   return (
     <div className={`min-h-screen text-sm text-center sm:text-left overflow-hidden`}>
@@ -40,6 +42,7 @@ export default function App() {
           globalIsTrackPlaying={globalIsTrackPlaying}
           playURI={playURI}
           setGlobalArtistId={setGlobalArtistId}
+          setGlobalAlbumId={setGlobalAlbumId}
         />}
         { view === 'artist' &&
         <Artist 
@@ -52,6 +55,20 @@ export default function App() {
           setGlobalCurrentSongId={setGlobalCurrentSongId} 
           setView={setView}
           setGlobalArtistId={setGlobalArtistId}
+          setGlobalAlbumId={setGlobalAlbumId}
+        />
+        }
+        { view === 'album' &&
+        <Album
+          globalAlbumId={globalAlbumId}
+          setGlobalCurrentSongId={setGlobalCurrentSongId}
+          globalIsTrackPlaying={globalIsTrackPlaying}
+          setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
+          setView={setView}
+          setGlobalArtistId={setGlobalArtistId}
+          playURI={playURI}
+          setPlayURI={setPlayURI}
+          deviceId={deviceId}
         />
         }
         </div>

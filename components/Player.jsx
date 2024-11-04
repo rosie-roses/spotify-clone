@@ -219,7 +219,7 @@ const PlayerUI = ({ globalIsTrackPlaying, setGlobalIsTrackPlaying, setDeviceId, 
                 </div>
             </div>
             <div className='flex items-center space-x-3 justify-end pr-5'>
-                <IconVolume className='w-6 h-6 cursor-pointer transition transform duration-100 ease-in-out' />
+                <IconVolume className='cursor-pointer transition transform duration-100 ease-in-out' width={30} />
                 <Slider 
                     aria-label="Volume slider"
                     min={0} 
